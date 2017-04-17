@@ -1,0 +1,480 @@
+<?php
+
+namespace MoviesBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Movie
+ *
+ * @ORM\Table(name="movie")
+ * @ORM\Entity(repositoryClass="MoviesBundle\Repository\MovieRepository")
+ * @ORM\HasLifecycleCallbacks
+ */
+class Movie
+{
+    /**
+     * @ORM\OneToMany(targetEntity="Host", mappedBy="movie",cascade={"persist"})
+     */
+    private $hosts;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Genre", cascade={"persist"})
+     */
+    private $genres;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     */
+    private $persons;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="synopsis", type="string", length=255)
+     */
+    private $synopsis;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="length", type="string", length=255)
+     */
+    private $length;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nationality", type="string", length=255)
+     */
+    private $nationality;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="release_date", type="string", length=255, nullable=true)
+     */
+    private $release_date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="allocine_uri", type="string", length=255)
+     */
+    private $allocine_uri;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(type="datetime",nullable = true)
+     */
+    private $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @ORM\Column(type="datetime",nullable = true)
+     */
+    private $updated;
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
+    }
+
+    public function __construct()
+    {
+        $this->hosts = new ArrayCollection();
+        $this->genres = new ArrayCollection();
+        $this->persons = new ArrayCollection();
+    }
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Movie
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set synopsis
+     *
+     * @param string $synopsis
+     *
+     * @return Movie
+     */
+    public function setSynopsis($synopsis)
+    {
+        $this->synopsis = $synopsis;
+
+        return $this;
+    }
+
+    /**
+     * Get synopsis
+     *
+     * @return string
+     */
+    public function getSynopsis()
+    {
+        return $this->synopsis;
+    }
+
+    /**
+     * Set dateOut
+     *
+     * @param \DateTime $dateOut
+     *
+     * @return Movie
+     */
+    public function setDateOut($dateOut)
+    {
+        $this->dateOut = $dateOut;
+
+        return $this;
+    }
+
+    /**
+     * Get dateOut
+     *
+     * @return \DateTime
+     */
+    public function getDateOut()
+    {
+        return $this->dateOut;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param float $rating
+     *
+     * @return Movie
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return float
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Set views
+     *
+     * @param integer $views
+     *
+     * @return Movie
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return int
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
+    /**
+     * Get hosts
+     *
+     * @return integer
+     */
+    public function getHosts()
+    {
+        return $this->hosts;
+    }
+
+    /**
+     * Add host
+     *
+     * @param \MoviesBundle\Entity\Host $host
+     *
+     * @return Movie
+     */
+    public function addHost(\MoviesBundle\Entity\Host $host)
+    {
+        $this->hosts[] = $host;
+        $host->setMovie($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove host
+     *
+     * @param \MoviesBundle\Entity\Host $host
+     */
+    public function removeHost(\MoviesBundle\Entity\Host $host)
+    {
+        $this->hosts->removeElement($host);
+    }
+
+    /**
+     * Add genre
+     *
+     * @param \MoviesBundle\Entity\Genre $genre
+     *
+     * @return Movie
+     */
+    public function addGenre(\MoviesBundle\Entity\Genre $genre)
+    {
+        $this->genres[] = $genre;
+
+        return $this;
+    }
+
+    /**
+     * Remove genre
+     *
+     * @param \MoviesBundle\Entity\Genre $genre
+     */
+    public function removeGenre(\MoviesBundle\Entity\Genre $genre)
+    {
+        $this->genres->removeElement($genre);
+    }
+
+    /**
+     * Get genres
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGenres()
+    {
+        return $this->genres;
+    }
+
+    /**
+     * Add person
+     *
+     * @param \MoviesBundle\Entity\Person $person
+     *
+     * @return Movie
+     */
+    public function addPerson(\MoviesBundle\Entity\Person $person)
+    {
+        $this->persons[] = $person;
+
+        return $this;
+    }
+
+    /**
+     * Remove person
+     *
+     * @param \MoviesBundle\Entity\Person $person
+     */
+    public function removePerson(\MoviesBundle\Entity\Person $person)
+    {
+        $this->persons->removeElement($person);
+    }
+
+    /**
+     * Get persons
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPersons()
+    {
+        return $this->persons;
+    }
+
+    /**
+     * Set length
+     *
+     * @param string $length
+     *
+     * @return Movie
+     */
+    public function setLength($length)
+    {
+        $this->length = $length;
+
+        return $this;
+    }
+
+    /**
+     * Get length
+     *
+     * @return string
+     */
+    public function getLength()
+    {
+        return $this->length;
+    }
+
+    /**
+     * Set nationality
+     *
+     * @param string $nationality
+     *
+     * @return Movie
+     */
+    public function setNationality($nationality)
+    {
+        $this->nationality = json_encode($nationality);
+
+        return $this;
+    }
+
+    /**
+     * Get nationality
+     *
+     * @return string
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return Movie
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set releaseDate
+     *
+     * @param string $releaseDate
+     *
+     * @return Movie
+     */
+    public function setReleaseDate($releaseDate)
+    {
+        $this->release_date = $releaseDate;
+
+        return $this;
+    }
+
+    /**
+     * Get releaseDate
+     *
+     * @return string
+     */
+    public function getReleaseDate()
+    {
+        return $this->release_date;
+    }
+
+    /**
+     * Set allocineUri
+     *
+     * @param string $allocineUri
+     *
+     * @return Movie
+     */
+    public function setAllocineUri($allocineUri)
+    {
+        $this->allocine_uri = $allocineUri;
+
+        return $this;
+    }
+
+    /**
+     * Get allocineUri
+     *
+     * @return string
+     */
+    public function getAllocineUri()
+    {
+        return $this->allocine_uri;
+    }
+}

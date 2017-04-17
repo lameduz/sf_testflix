@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: localhost
+    database_port: null
+    database_name: sf_testflix
+    database_user: root
+    database_password: kookli12
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: eb55a672235964644d52bee16541ff9c3cf8e2d7
