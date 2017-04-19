@@ -34,7 +34,7 @@ abstract class Client
     protected $internalRequest;
     protected $request;
     protected $internalResponse;
-    public $response;
+    protected $response;
     protected $crawler;
     protected $insulated = false;
     protected $redirect;
