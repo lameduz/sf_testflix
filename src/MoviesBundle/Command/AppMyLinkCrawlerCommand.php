@@ -42,16 +42,18 @@ class AppMyLinkCrawlerCommand extends ContainerAwareCommand
             $output->writeln('Paramètres manquants!');
         }
     }
+
     public function crawler($page, $year)
     {
         $this->client = new Client();
+        $this->client->setHeader('user-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.472.63 Safari/534.3');
         $this->crawler = $this->client->request('get', 'https://streamay.bz/films/annee/' . $year . '/?page=' . $page);
         // Récupère attributs href et text grâce aux liens des films sur la page
-        $attributes = $this->crawler->filter('.infos > .title')->extract(['href', '_text']);
         // Récupère le nombre de pages afin de mettre en place la pagination
         $pages_count = $this->crawler->filter('.pagination > li')->last()->previousAll()->text();
-        // On boucle tant que le nombre de pages analysée n'est pas égale au nombre de pages du site cible.
+        // On boucle tant que le nombre de pages analysée n'est pas égal au nombre de pages du site cible.
         while ($this->savedPages != $pages_count) {
+            $attributes = $this->crawler->filter('.infos > .title')->extract(['href', '_text']);
             $this->navigator($attributes);
         }
     }
@@ -83,6 +85,7 @@ class AppMyLinkCrawlerCommand extends ContainerAwareCommand
                     $host->setUri($streamayMovieHost->code);
                     $movie->addHost($host);
                     $em->flush();
+                    dump($movie->getTitle() . "a été mis à jour dans notre base de données.");
                 }
             }
             $analyzed_items++;
@@ -103,10 +106,12 @@ class AppMyLinkCrawlerCommand extends ContainerAwareCommand
         $id = $tmp[0];
         return $id;
     }
+
     public function setYear($year)
     {
         $this->year = $year;
     }
+
     public function setPage($page)
     {
         $this->page = $page;

@@ -1,3 +1,6 @@
 movies_homepage:
     path:     /
-    defaults: { _controller: MoviesBundle:Default:index }
+    defaults: { _controller: MoviesBundle:Movie:index }
+movies_show:
+    path:     /
+    defaults: { _controller: MoviesBundle:Movie:show }

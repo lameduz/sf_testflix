@@ -75,7 +75,8 @@ class AppMyAllocineCrawlerCommand extends ContainerAwareCommand
     protected function crawler()
     {
         $this->client = new Client();
-        $this->client->setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
+
+        $this->client->setHeader('user-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.472.63 Safari/534.3');
         $this->crawler = $this->client->request('GET', $this->uri_to_crawl . '/?page=' . $this->page);
         $lastPage = $this->crawler->filter('.pagination-item-holder')->children()->last()->text();
         #$this->savedPages = 0;
